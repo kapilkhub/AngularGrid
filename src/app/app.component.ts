@@ -38,10 +38,10 @@ export class AppComponent  implements OnInit {
     country:'UAE'
   },
   {
-    name:'Mala Khubchandani',
+    name:'Ishmeet Singh',
     age:27,
-    status:'Married',
-    gender:'Female',
+    status:'Single',
+    gender:'Male',
     country:'Germany'
   }
 ]
