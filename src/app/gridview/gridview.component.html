@@ -1,0 +1,77 @@
+<p-table #dt 
+    [columns]="cols" 
+    [value]="rows" 
+    [scrollable]="config.scrollable" 
+    [paginator]="config.paginator"
+    [rows]="config.rows" 
+    [scrollHeight]="config.scrollHeight" 
+    [resizableColumns]="true" 
+    [reorderableColumns]="true"
+    (onRowSelect)="onRowSelect($event)" 
+    (onRowUnselect)="onRowUnselect($event)"
+    [selectionMode]="config.selectionMode"
+    [contextMenu]="cm"
+    [(contextMenuSelection)]="config.selectedMenuItem" 
+   
+        >
+
+    <ng-template pTemplate="caption">
+        <div style="text-align: right">
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="50" placeholder="Search"
+                (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+        </div>
+        <div class="ui-helper-clearfix">
+            <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="All Data" (click)="dt.exportCSV()"
+                style="float:left">Excel</button>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="colgroup" let-columns>
+            <colgroup *ngIf=config.checkboxSelection>
+                <col [style.width]="config.checkboxOffset">
+            </colgroup>
+            <colgroup *ngIf=config.radioSelection>
+                <col [style.width]="config.radioOffset">
+            </colgroup>
+        <colgroup>
+            <col *ngFor="let col of columns" [style.width]="col.width">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr >
+          <th  *ngIf= "config.checkboxSelection" [style.width]="config.checkboxOffset">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th  *ngIf= "config.radioSelection" [style.width]="config.radioOffset">
+                   
+            </th>
+            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn>
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        There are no records
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-columns="columns" let-index="rowIndex" >
+        <tr [pSelectableRow]="row" [pContextMenuRow]="row" [pReorderableRow]="index">
+            <td  *ngIf= config.checkboxSelection>
+                <p-tableCheckbox [value]="row"></p-tableCheckbox>
+            </td>
+            <td  *ngIf= config.radioSelection>
+                    <p-tableRadioButton  [value]="row"></p-tableRadioButton>
+                </td>
+
+            <td *ngFor="let col of columns" class="ui-resizable-column" [pTooltip]="row[col.field]" tooltipPosition="right" pReorderableRowHandle >
+                {{row[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table>
+
+<p-contextMenu [hidden]="!config.showContextMenu" #cm [model]="config.contextMenus"></p-contextMenu>
+
+
